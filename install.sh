@@ -2,6 +2,9 @@
 
 # Function to copy site content to Nginx site folder
 copy_site_content() {
+    echo "Removing default index file"
+    rm -f /var/www/html/index.nginx-debian.html
+    
     echo "Copying site content to /var/www/html"
     cp -r site/* /var/www/html/
     chown -R www-data:www-data /var/www/html/
