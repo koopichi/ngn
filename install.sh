@@ -3,7 +3,7 @@
 # Function to copy site content to Nginx site folder
 copy_site_content() {
     echo "Copying site content to /var/www/html"
-    cp -r mysite/* /var/www/html/
+    cp -r site/* /var/www/html/
     chown -R www-data:www-data /var/www/html/
     chmod -R 755 /var/www/html/
     echo "Site content copied successfully."
