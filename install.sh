@@ -28,7 +28,7 @@ cp /etc/nginx/sites-available/default /etc/nginx/sites-available/$DOMAIN
 ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
 sed -i "s/_;/$DOMAIN;/" "/etc/nginx/sites-available/$DOMAIN"
 sed -i "s/ default_server//" "/etc/nginx/sites-available/$DOMAIN"
-sed -i "53 r /root/reverse/reverse.txt" "/etc/nginx/sites-available/$DOMAIN"
+sed -i "53 r /root/ngn/reverse.txt" "/etc/nginx/sites-available/$DOMAIN"
 
 # Obtain SSL certificate using Certbot
 certbot --nginx -d $DOMAIN --register-unsafely-without-email
