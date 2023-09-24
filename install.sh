@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Function to add iptables rules
+
 add_iptables_rules() {
     echo "Adding iptables rules to block traffic from www.speedtest.net"
     iptables -I INPUT -s www.speedtest.net -j DROP
     iptables -I FORWARD -p tcp -d www.speedtest.net -j DROP
 }
 
-# Function to copy site content
+
 copy_site_content() {
     echo "Removing default index file"
     rm -f /var/www/html/index.nginx-debian.html
@@ -19,37 +19,37 @@ copy_site_content() {
     echo "Site content copied successfully."
 }
 
-# Install necessary packages
+
 sudo apt update
 sudo apt install nginx certbot python3-certbot-nginx python3-pip iptables-persistent -y
 
-# Add iptables rules
+
 add_iptables_rules
 
-# Prompt for the domain name
+
 read -p "Your Domain: " DOMAIN
 
-# Copy site content
+
 copy_site_content
 
-# Configure Nginx
+
 cp /etc/nginx/sites-available/default /etc/nginx/sites-available/$DOMAIN
 ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
 sed -i "s/_;/$DOMAIN;/" "/etc/nginx/sites-available/$DOMAIN"
 sed -i "s/ default_server//" "/etc/nginx/sites-available/$DOMAIN"
 sed -i "53 r /root/ngn/reverse.txt" "/etc/nginx/sites-available/$DOMAIN"
 
-# Obtain SSL certificate
+
 certbot --nginx -d $DOMAIN --register-unsafely-without-email
 
-# Save iptables rules
+
 iptables-save > /etc/iptables/rules.v4
 ip6tables-save > /etc/iptables/rules.v6
 
-# Restart Nginx
+
 systemctl restart nginx
 
-# Save iptables rules for persistence
+
 service iptables-persistent save
 
 echo "Your server configuration is complete."
